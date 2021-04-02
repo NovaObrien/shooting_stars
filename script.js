@@ -3,7 +3,7 @@ const ctx = canvas.getContext('2d')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 let particlesArrary = []
-const numberOfParticles = 100
+const numberOfParticles = 7
 
 //measure title element
 let titleElement = document.getElementById('title1')
@@ -18,9 +18,9 @@ class Particle {
   constructor(x, y){
     this.x = x
     this.y = y
-    this.size = Math.random() * 15 + 1
+    this.size = Math.random() * 10 + 1
     this.weight = Math.random() * 1 + 1
-    this.directionX = -1
+    this.directionX = -10
   }
   update(){
     if(this.y > canvas.height){
@@ -44,7 +44,7 @@ class Particle {
     }
   }
   draw(){
-    ctx.fillStyle = 'purple'
+    ctx.fillStyle = 'gold'
     ctx.beginPath()
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
     ctx.closePath()

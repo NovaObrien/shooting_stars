@@ -3,17 +3,12 @@ const ctx = canvas.getContext('2d')
 canvas.width = window.innerWidth
 canvas.height = window.innerHeight
 let particlesArrary = []
-const numberOfParticles = 7
+const numberOfParticles = 3
+let hue = 0;
 
 //measure title element
 let titleElement = document.getElementById('title1')
 let titleMeasurements = titleElement.getBoundingClientRect()
-let title = {
-  x: titleMeasurements.left,
-  y: titleMeasurements.top,
-  width: titleMeasurements.width,
-  height: 10
-}
 class Particle {
   constructor(x, y){
     this.x = x
@@ -24,27 +19,24 @@ class Particle {
   }
   update(){
     if(this.y > canvas.height){
-      this.y = 0 - this.size
-      this.weight = Math.random() * 1 + 1
+      this.y = Math.random() * canvas.height * 1.3
+      this.weight = Math.random() * 20 + 1
       this.x = Math.random() * canvas.width * 1.3
     } 
+    else if(this.y < Math.random() * this.y * 1.1 - 50){
+      this.y = Math.random() * canvas.height * 1.3
+      this.weight = Math.random() * 20 + 1
+      this.x = Math.random() * canvas.width * 1.3
+    }
     this.weight += 0.05
+    if(this.size > 1){
+      this.size -= 0.001
+    }
     this.y += this.weight
     this.x += this.directionX
-
-    // check for collision between each partivle and title element
-    if(
-      this.x < title.x + title.width &&
-      this.x + this.size > title.x &&
-      this.y < title.y + title.height &&
-      this.y + this.size > title.y
-    ) {
-        this.y -= 3;
-        this.weight *= -0.5
-    }
   }
   draw(){
-    ctx.fillStyle = 'gold'
+    ctx.fillStyle = 'hsl('+ hue +', 100%, 50%)'
     ctx.beginPath()
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
     ctx.closePath()
@@ -62,13 +54,13 @@ function init(){
 init()
 
 function animate(){
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.3)'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   for ( let i = 0; i < particlesArrary.length; i++){
     particlesArrary[i].update()
     particlesArrary[i].draw()
   }
-  // ctx.fillRect(title.x, title.y, title.width, title.height)
+  hue++
   requestAnimationFrame(animate)
 }
 animate()
@@ -76,12 +68,6 @@ animate()
 window.addEventListener('resize', function() {
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
-  titleMeasurements = titleElement.getBoundingClientRect()
-  title = {
-    x: titleMeasurements.left,
-    y: titleMeasurements.top,
-    width: titleMeasurements.width,
-    height: 10
-  }
+  
   init()
 })
